@@ -3,9 +3,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from main import analysis
-from src.modeles.analyse import Analysis
-
 # Configuration de la page
 st.set_page_config(
     page_title="Analyse nutritionnelle des recettes végétariennes / vegan",

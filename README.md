@@ -20,3 +20,5 @@ Comparer les valeurs nutritionnelles des recettes végétariennes, véganes et o
 Visualiser les résultats sous forme de graphiques interactifs.
 Sélectionner différentes variables d'analyse pour personnaliser les résultats.
 
+## Tests 
+Le rapport coverage pour les tests est disponible ici : https://alfredwande.github.io/vegetarions/htmlcov/index.html

@@ -1,40 +1,54 @@
-import pandas as pd
 import pytest
+import pandas as pd
 from src.modeles.preprocess import Preprocessing
+from src.modeles.preprocess import RecipeClassifier
 
 @pytest.fixture
-def mock_data():
+def sample_data(tmp_path):
     data = {
-        'id': [1, 2],
-        'name': ['Recipe1', 'Recipe2'],
-        'nutrition': ['[200,5,10,20,15,5,30]', '[300,10,20,30,25,15,60]'],
-        'n_steps': [2, 2],
-        'n_ingredients': [5, 6],
-        'minutes': [30, 40]
+        'nutrition': ['[100, 10, 5, 200, 10, 5, 50]', '[200, 20, 10, 400, 20, 10, 100]', '[150, 15, 7, 300, 15, 7, 75]'],
+        'n_steps': [5, 10, 7],
+        'n_ingredients': [10, 15, 12],
+        'minutes': [30, 60, 45],
+        'ingredients': ['chicken, salt, pepper', 'tofu, soy sauce, garlic', 'beef, onion, tomato'],
+        'name': ['Chicken Soup', 'Tofu Stir Fry', 'Beef Stew'],
+        'steps': ['cook chicken, add salt and pepper', 'cook tofu, add soy sauce and garlic', 'cook beef, add onion and tomato']
     }
-    return pd.DataFrame(data)
+    df = pd.DataFrame(data)
+    file_path = tmp_path / "sample_data.csv"
+    df.to_csv(file_path, index=False)
+    return file_path
 
-def test_preprocess(mock_data, tmp_path):
-    # Créer un fichier temporaire à partir des données fictives
-    input_file = tmp_path / "raw_recipes.csv"
-    output_file = tmp_path / "cleaned_recipes.csv"
-    mock_data.to_csv(input_file, index=False)
+def test_preprocess(sample_data):
+    preprocessor = Preprocessing(sample_data)
+    preprocessor.preprocess()
+    assert 'calories' in preprocessor.recipe.columns
+    assert 'interaction_steps_ingredients' in preprocessor.recipe.columns
 
-    # Initialiser le préprocesseur
-    preprocessor = Preprocessing(file_path=str(input_file))
+def test_remove_outliers(sample_data):
+    preprocessor = Preprocessing(sample_data)
     preprocessor.preprocess()
     preprocessor.remove_outliers()
-    preprocessor.save_cleaned_data(output_path=str(output_file))
+    assert 'log_minutes' in preprocessor.recipe.columns
 
-    # Charger les données traitées
-    processed_data = pd.read_csv(output_file)
+def test_save_cleaned_data_preprocessing(sample_data, tmp_path):
+    preprocessor = Preprocessing(sample_data)
+    preprocessor.preprocess()
+    output_path = tmp_path / "cleaned_data.csv"
+    preprocessor.save_cleaned_data(output_path)
+    assert output_path.exists()
 
-    # Tests pour valider les colonnes attendues
-    expected_columns = [
-        'id', 'name', 'calories', 'total fat (PDV%)', 'sugar (PDV%)',
-        'sodium (PDV%)', 'protein (PDV%)', 'saturated fat (PDV%)',
-        'carbohydrates (PDV%)', 'interaction_steps_ingredients', 'log_minutes'
-    ]
-    # Vérifier que toutes les colonnes attendues sont présentes dans les données traitées
-    missing_columns = [col for col in expected_columns if col not in processed_data.columns]
-    assert not missing_columns, f"Colonnes manquantes dans les données traitées : {missing_columns}"
+def test_classify_recipes(sample_data):
+    df = pd.read_csv(sample_data)
+    classifier = RecipeClassifier(df)
+    classifier.classify_recipes()
+    assert 'vege' in classifier.df.columns
+    assert 'vegan_final' in classifier.df.columns
+
+def test_save_cleaned_data_classifier(sample_data, tmp_path):
+    df = pd.read_csv(sample_data)
+    classifier = RecipeClassifier(df)
+    classifier.classify_recipes()
+    output_path = tmp_path / "classified_data.csv"
+    classifier.save_cleaned_data(output_path)
+    assert output_path.exists()

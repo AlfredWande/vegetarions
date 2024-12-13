@@ -20,21 +20,17 @@ Ce projet consiste en une **application Streamlit interactive** permettant d'ana
 
 Avant d'exécuter l'application, assurez-vous d'avoir **Python 3.12** ou une version compatible installé sur votre machine. Il est recommandé d'utiliser un environnement virtuel pour éviter les conflits de dépendances.
 
+### les données 
+
+Téléchargez les données depuis Kaggle via le lien suivant : https://www.kaggle.com/datasets/shuyangli94/food-com-recipes-and-user-interactions?select=RAW_recipes.csv
+Placez le fichier téléchargé dans le répertoire /mnt/c/Users/awand/Downloads/raw_data/.
+Le chemin du fichier dans main.py doit correspondre à l'endroit où vous avez placé le fichier.
+
 ### Étapes d'installation
 
 1. **Clonez le projet depuis le dépôt Git** :
    ```bash
-   git clone <URL_DU_REPOSITORY>
-Naviguez dans le répertoire du projet :
 
-bash
-Copier le code
-cd analyse-des-recettes-vegetariennes-et-veganes
-Installez Poetry (si ce n'est pas déjà fait) :
-
-bash
-Copier le code
-pip install poetry
 Installez les dépendances avec Poetry :
 
 bash
@@ -54,6 +50,7 @@ Une fois que l'environnement virtuel est activé, vous pouvez démarrer l'applic
 bash
 Copier le code
 streamlit run app.py
+
 L'application vous permettra de :
 
 Comparer les valeurs nutritionnelles des recettes végétariennes, véganes et omnivores.

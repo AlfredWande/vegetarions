@@ -5,7 +5,8 @@ import os
 
 # Définir les chemins
 raw_file_path = "/mnt/c/Users/awand/Downloads/raw_data/RAW_recipes.csv"  # Chemin complet du fichier brut
-output_path = "./data/cleaned_recipes.csv"
+output_dir = "./data"
+output_path = os.path.join(output_dir, "cleaned_recipes.csv")
 
 # Vérifier si le fichier brut existe
 if not os.path.exists(raw_file_path):
@@ -15,6 +16,9 @@ if not os.path.exists(raw_file_path):
 )
 
 print(f"Fichier brut trouvé : {raw_file_path}")
+
+# Créer le répertoire de sortie s'il n'existe pas
+os.makedirs(output_dir, exist_ok=True)
 
 # Étape 1 : Prétraitement
 preprocessor = Preprocessing(file_path=raw_file_path)

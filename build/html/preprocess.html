@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Française" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>preprocess module &mdash; Analyse des recettes végétariennes et véganes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=c74dca97"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="analyse module" href="analyse.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Analyse des recettes végétariennes et véganes
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="modules.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analyse.html">analyse module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">preprocess module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preprocess.Preprocessing"><code class="docutils literal notranslate"><span class="pre">Preprocessing</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.recipe"><code class="docutils literal notranslate"><span class="pre">Preprocessing.recipe</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.recipe_cleaned"><code class="docutils literal notranslate"><span class="pre">Preprocessing.recipe_cleaned</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.find_optimal_k1_k2"><code class="docutils literal notranslate"><span class="pre">Preprocessing.find_optimal_k1_k2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.preprocess"><code class="docutils literal notranslate"><span class="pre">Preprocessing.preprocess()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.remove_outliers"><code class="docutils literal notranslate"><span class="pre">Preprocessing.remove_outliers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.Preprocessing.save_cleaned_data"><code class="docutils literal notranslate"><span class="pre">Preprocessing.save_cleaned_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocess.RecipeClassifier"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.df"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.df</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.shelf"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.shelf</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.non_vegetarian_taxons"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.non_vegetarian_taxons</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.non_vegan_taxons"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.non_vegan_taxons</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.classify_recipes"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.classify_recipes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.clean_and_tokenize"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.clean_and_tokenize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.is_vegan"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.is_vegan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.is_vegetarian"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.is_vegetarian()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preprocess.RecipeClassifier.save_cleaned_data"><code class="docutils literal notranslate"><span class="pre">RecipeClassifier.save_cleaned_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Analyse des recettes végétariennes et véganes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">preprocess module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/preprocess.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-preprocess">
+<span id="preprocess-module"></span><h1>preprocess module<a class="headerlink" href="#module-preprocess" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="preprocess.Preprocessing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">preprocess.</span></span><span class="sig-name descname"><span class="pre">Preprocessing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#Preprocessing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.Preprocessing" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe pour effectuer le prétraitement des données de recettes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.recipe">
+<span class="sig-name descname"><span class="pre">recipe</span></span><a class="headerlink" href="#preprocess.Preprocessing.recipe" title="Link to this definition"></a></dt>
+<dd><p>Le DataFrame contenant les données des recettes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.recipe_cleaned">
+<span class="sig-name descname"><span class="pre">recipe_cleaned</span></span><a class="headerlink" href="#preprocess.Preprocessing.recipe_cleaned" title="Link to this definition"></a></dt>
+<dd><p>Le DataFrame contenant les données des recettes nettoyées.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.find_optimal_k1_k2">
+<span class="sig-name descname"><span class="pre">find_optimal_k1_k2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k1_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k2_values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">95</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#Preprocessing.find_optimal_k1_k2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.Preprocessing.find_optimal_k1_k2" title="Link to this definition"></a></dt>
+<dd><p>Trouve les valeurs optimales de k1 et k2 pour la suppression des outliers.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pd.DataFrame</em>) -- Le DataFrame contenant les données.</p></li>
+<li><p><strong>col</strong> (<em>str</em>) -- La colonne pour laquelle trouver les valeurs optimales de k1 et k2.</p></li>
+<li><p><strong>k1_values</strong> (<em>list</em>) -- Les valeurs possibles de k1.</p></li>
+<li><p><strong>k2_values</strong> (<em>list</em>) -- Les valeurs possibles de k2.</p></li>
+<li><p><strong>target_percent</strong> (<em>float</em>) -- Le pourcentage cible de données à conserver.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Les valeurs optimales de k1 et k2.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.preprocess">
+<span class="sig-name descname"><span class="pre">preprocess</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#Preprocessing.preprocess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.Preprocessing.preprocess" title="Link to this definition"></a></dt>
+<dd><p>Effectue le prétraitement des données des recettes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.remove_outliers">
+<span class="sig-name descname"><span class="pre">remove_outliers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#Preprocessing.remove_outliers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.Preprocessing.remove_outliers" title="Link to this definition"></a></dt>
+<dd><p>Supprime les outliers des données des recettes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.Preprocessing.save_cleaned_data">
+<span class="sig-name descname"><span class="pre">save_cleaned_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#Preprocessing.save_cleaned_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.Preprocessing.save_cleaned_data" title="Link to this definition"></a></dt>
+<dd><p>Sauvegarde les données nettoyées dans un fichier CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_path</strong> (<em>str</em>) -- Le chemin du fichier CSV de sortie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">preprocess.</span></span><span class="sig-name descname"><span class="pre">RecipeClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Classe pour classifier les recettes en végétariennes et véganes.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.df">
+<span class="sig-name descname"><span class="pre">df</span></span><a class="headerlink" href="#preprocess.RecipeClassifier.df" title="Link to this definition"></a></dt>
+<dd><p>Le DataFrame contenant les données des recettes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.shelf">
+<span class="sig-name descname"><span class="pre">shelf</span></span><a class="headerlink" href="#preprocess.RecipeClassifier.shelf" title="Link to this definition"></a></dt>
+<dd><p>L'objet Shelf pour obtenir des informations sur les aliments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Shelf</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.non_vegetarian_taxons">
+<span class="sig-name descname"><span class="pre">non_vegetarian_taxons</span></span><a class="headerlink" href="#preprocess.RecipeClassifier.non_vegetarian_taxons" title="Link to this definition"></a></dt>
+<dd><p>Les taxons des aliments non végétariens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.non_vegan_taxons">
+<span class="sig-name descname"><span class="pre">non_vegan_taxons</span></span><a class="headerlink" href="#preprocess.RecipeClassifier.non_vegan_taxons" title="Link to this definition"></a></dt>
+<dd><p>Les taxons des aliments non véganes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.classify_recipes">
+<span class="sig-name descname"><span class="pre">classify_recipes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier.classify_recipes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier.classify_recipes" title="Link to this definition"></a></dt>
+<dd><p>Classifie les recettes en végétariennes et véganes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.clean_and_tokenize">
+<span class="sig-name descname"><span class="pre">clean_and_tokenize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier.clean_and_tokenize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier.clean_and_tokenize" title="Link to this definition"></a></dt>
+<dd><p>Nettoie et tokenize le texte.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) -- Le texte à nettoyer et tokenizer.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Une liste de tokens.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.is_vegan">
+<span class="sig-name descname"><span class="pre">is_vegan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier.is_vegan"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier.is_vegan" title="Link to this definition"></a></dt>
+<dd><p>Vérifie si le texte contient des aliments non véganes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) -- Le texte à vérifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>&quot;vegan&quot; si le texte ne contient pas d'aliments non véganes, sinon &quot;non-vegan&quot;.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.is_vegetarian">
+<span class="sig-name descname"><span class="pre">is_vegetarian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier.is_vegetarian"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier.is_vegetarian" title="Link to this definition"></a></dt>
+<dd><p>Vérifie si le texte contient des aliments non végétariens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>text</strong> (<em>str</em>) -- Le texte à vérifier.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>&quot;végétarienne&quot; si le texte ne contient pas d'aliments non végétariens, sinon &quot;non-végétarienne&quot;.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="preprocess.RecipeClassifier.save_cleaned_data">
+<span class="sig-name descname"><span class="pre">save_cleaned_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/preprocess.html#RecipeClassifier.save_cleaned_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#preprocess.RecipeClassifier.save_cleaned_data" title="Link to this definition"></a></dt>
+<dd><p>Sauvegarde les données classifiées dans un fichier CSV.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_path</strong> (<em>str</em>) -- Le chemin du fichier CSV de sortie.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="analyse.html" class="btn btn-neutral float-left" title="analyse module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alfred Wande-Wula.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

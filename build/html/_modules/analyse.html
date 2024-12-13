@@ -1,0 +1,259 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="Française" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>analyse &mdash; Analyse des recettes végétariennes et véganes 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=c74dca97"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Analyse des recettes végétariennes et véganes
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">src</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../analyse.html">analyse module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../preprocess.html">preprocess module</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Analyse des recettes végétariennes et véganes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">analyse</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for analyse</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">ttest_ind</span><span class="p">,</span> <span class="n">pearsonr</span><span class="p">,</span> <span class="n">pointbiserialr</span>
+
+<div class="viewcode-block" id="Analysis">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis">[docs]</a>
+<span class="k">class</span> <span class="nc">Analysis</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Classe pour effectuer diverses analyses statistiques sur un DataFrame de recettes.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        data (pd.DataFrame): Le DataFrame contenant les données des recettes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialise la classe Analysis avec un DataFrame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data (pd.DataFrame): Le DataFrame contenant les données des recettes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Les données doivent être un chemin de fichier ou un DataFrame pandas.&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Analysis.calculate_interaction_means">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.calculate_interaction_means">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_interaction_means</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcule les moyennes des interactions steps-ingredients pour les recettes végétariennes et véganes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interaction_means</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">interaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;interaction_steps_ingredients&#39;</span><span class="p">]</span>
+                <span class="n">interaction_means</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">interaction</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;La colonne </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> n&#39;existe pas dans les données.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">interaction_means</span></div>
+
+
+<div class="viewcode-block" id="Analysis.t_test_interactions">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.t_test_interactions">[docs]</a>
+    <span class="k">def</span> <span class="nf">t_test_interactions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Effectue un test t de Student pour comparer les interactions entre les étapes et les ingrédients</span>
+<span class="sd">        entre les recettes végétariennes et non-végétariennes, ainsi que pour les recettes véganes et non-véganes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="n">interaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;interaction_steps_ingredients&#39;</span><span class="p">]</span>
+            <span class="n">non_interaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s1">&#39;interaction_steps_ingredients&#39;</span><span class="p">]</span>
+
+            <span class="n">t_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">interaction</span><span class="p">,</span> <span class="n">non_interaction</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-statistique pour </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">t_stat</span><span class="si">}</span><span class="s2">, P-valeur : </span><span class="si">{</span><span class="n">p_value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.calculate_correlation_matrix">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.calculate_correlation_matrix">[docs]</a>
+    <span class="k">def</span> <span class="nf">calculate_correlation_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcule et affiche la matrice de corrélation pour les variables numériques du DataFrame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">numeric_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;float64&#39;</span><span class="p">,</span> <span class="s1">&#39;int64&#39;</span><span class="p">])</span>
+        <span class="n">correlation_matrix</span> <span class="o">=</span> <span class="n">numeric_data</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrice de Corrélation :&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">correlation_matrix</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.pairwise_correlations">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.pairwise_correlations">[docs]</a>
+    <span class="k">def</span> <span class="nf">pairwise_correlations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcule et affiche les corrélations de Pearson entre les paires de variables nutritionnelles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">,</span> <span class="s1">&#39;sodium (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;protein (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;total fat (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;saturated fat (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;carbohydrates (PDV%)&#39;</span><span class="p">]</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tests de corrélation deux à deux :&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)):</span>
+                <span class="n">var1</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">var2</span> <span class="o">=</span> <span class="n">variables</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">correlation</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">pearsonr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">var1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">var2</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrélation entre </span><span class="si">{</span><span class="n">var1</span><span class="si">}</span><span class="s2"> et </span><span class="si">{</span><span class="n">var2</span><span class="si">}</span><span class="s2"> : r = </span><span class="si">{</span><span class="n">correlation</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.point_biserial_correlation">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.point_biserial_correlation">[docs]</a>
+    <span class="k">def</span> <span class="nf">point_biserial_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calcule et affiche les corrélations point-bisériales entre une variable binaire (végétarienne ou végane)</span>
+<span class="sd">        et des variables nutritionnelles.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">binary_col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">,</span> <span class="s1">&#39;protein (PDV%)&#39;</span><span class="p">]:</span>
+                <span class="n">correlation</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">pointbiserialr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">binary_col</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Corrélation entre </span><span class="si">{</span><span class="n">binary_col</span><span class="si">}</span><span class="s2"> et </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> : r = </span><span class="si">{</span><span class="n">correlation</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.t_test_calories">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.t_test_calories">[docs]</a>
+    <span class="k">def</span> <span class="nf">t_test_calories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Effectue des tests t de Student pour comparer les moyennes des calories</span>
+<span class="sd">        entre les recettes végétariennes et non-végétariennes, ainsi que pour les recettes véganes et non-véganes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Tests t de Student pour les calories :&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">binary_col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="n">group_veg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">binary_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">][</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span>
+            <span class="n">group_non_veg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">binary_col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">][</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span>
+            <span class="n">t_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">group_veg</span><span class="p">,</span> <span class="n">group_non_veg</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;T-test pour les calories avec </span><span class="si">{</span><span class="n">binary_col</span><span class="si">}</span><span class="s2"> : T = </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, p = </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.high_calorie_analysis">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.high_calorie_analysis">[docs]</a>
+    <span class="k">def</span> <span class="nf">high_calorie_analysis</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Analyse les recettes très caloriques en comparant les résumés nutritionnels</span>
+<span class="sd">        des recettes végétariennes et non-végétariennes, ainsi que pour les recettes véganes et non-véganes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">calories_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">high_calories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">calories_threshold</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="n">veg_recipes</span> <span class="o">=</span> <span class="n">high_calories</span><span class="p">[</span><span class="n">high_calories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">non_veg_recipes</span> <span class="o">=</span> <span class="n">high_calories</span><span class="p">[</span><span class="n">high_calories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="n">veg_summary</span> <span class="o">=</span> <span class="n">veg_recipes</span><span class="p">[[</span><span class="s1">&#39;sodium (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;carbohydrates (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;saturated fat (PDV%)&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+            <span class="n">non_veg_summary</span> <span class="o">=</span> <span class="n">non_veg_recipes</span><span class="p">[[</span><span class="s1">&#39;sodium (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;carbohydrates (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;saturated fat (PDV%)&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Résumé Nutritionnel des Recettes </span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2"> Très Caloriques :&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">veg_summary</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Résumé Nutritionnel des Recettes Non-</span><span class="si">{</span><span class="n">col</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2"> Très Caloriques :&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">non_veg_summary</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Analysis.t_tests_high_calories">
+<a class="viewcode-back" href="../analyse.html#analyse.Analysis.t_tests_high_calories">[docs]</a>
+    <span class="k">def</span> <span class="nf">t_tests_high_calories</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Effectue des tests t de Student pour comparer les variables nutritionnelles</span>
+<span class="sd">        entre les recettes végétariennes et non-végétariennes, ainsi que pour les recettes véganes et non-véganes parmi les recettes très caloriques.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">calories_threshold</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.75</span><span class="p">)</span>
+        <span class="n">high_calories</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;calories&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">calories_threshold</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;vege&#39;</span><span class="p">,</span> <span class="s1">&#39;vegan_final&#39;</span><span class="p">]:</span>
+            <span class="n">veg_recipes</span> <span class="o">=</span> <span class="n">high_calories</span><span class="p">[</span><span class="n">high_calories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">non_veg_recipes</span> <span class="o">=</span> <span class="n">high_calories</span><span class="p">[</span><span class="n">high_calories</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sodium (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;carbohydrates (PDV%)&#39;</span><span class="p">,</span> <span class="s1">&#39;saturated fat (PDV%)&#39;</span><span class="p">]:</span>
+                <span class="n">t_stat</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">veg_recipes</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="n">non_veg_recipes</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> pour </span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2"> : T-statistique = </span><span class="si">{</span><span class="n">t_stat</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">, P-valeur = </span><span class="si">{</span><span class="n">p_value</span><span class="si">:</span><span class="s2">.3e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alfred Wande-Wula.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

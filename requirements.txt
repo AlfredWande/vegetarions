@@ -19,3 +19,4 @@ nltk==3.9.1
 scikit-learn==1.6.0
 openpyxl==3.1.5
 requests==2.32.3
+pyfood==0.0.5

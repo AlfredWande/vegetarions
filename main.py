@@ -4,7 +4,7 @@ from src.modeles.analyse import Analysis
 import os
 
 # Définir les chemins
-raw_file_path = "/mnt/c/Users/awand/Downloads/raw_data/RAW_recipes.csv"  # Chemin complet du fichier brut
+raw_file_path = r"C:\Users\awand\Downloads\raw_data\RAW_recipes.csv"  # Chemin complet du fichier brut
 output_path = "./data/cleaned_recipes.csv"
 
 # Vérifier si le fichier brut existe

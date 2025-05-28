@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from statsmodels.robust.scale import mad
 from sklearn.preprocessing import StandardScaler
@@ -118,14 +119,10 @@ class Preprocessing:
         self.recipe['log_minutes'] = np.log1p(self.recipe['minutes'])
 
     def save_cleaned_data(self, output_path):
-        """
-        Sauvegarde les données nettoyées dans un fichier CSV.
-
-        Args:
-            output_path (str): Le chemin du fichier CSV de sortie.
-        """
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         self.recipe.to_csv(output_path, index=False)
         print(f"Données prétraitées sauvegardées dans {output_path}")
+
 
 class RecipeClassifier:
     """
@@ -230,11 +227,6 @@ class RecipeClassifier:
         self.df["vegan_final"] = ((self.df["vege"] == 1) & (self.df["vegan"] == 1)).astype(int)
 
     def save_cleaned_data(self, output_path):
-        """
-        Sauvegarde les données classifiées dans un fichier CSV.
-
-        Args:
-            output_path (str): Le chemin du fichier CSV de sortie.
-        """
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         self.df.to_csv(output_path, index=False)
         print(f"Données prétraitées sauvegardées dans {output_path}")

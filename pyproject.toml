@@ -3,7 +3,6 @@ name = "analyse des recettes végétariennes et véganes"
 version = "0.1.0"
 description = "Développeemnt d'une app streamlit pour l'analyse comparative entre type de recettes"
 authors = ["Alfred Wande <awandewula@gmail.com>"]
-python = "^3.12"
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -15,6 +14,7 @@ black = "24.10.0"
 sphinx = "8.1.3"
 streamlit = "1.40.2"
 poetry = "1.8.5"
+pyfood = "^0.0.5"
 
 [tool.poetry.group.dev.dependencies]
 pandas = "2.2.3"

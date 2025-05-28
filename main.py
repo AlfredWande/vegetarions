@@ -4,13 +4,13 @@ import pandas as pd
 from src.modeles.preprocess import Preprocessing, RecipeClassifier
 from src.modeles.analyse import Analysis
 
-def download_from_dropbox(dropbox_url, dest_path):
+def download_from_s3(s3_url, dest_path):
     if os.path.exists(dest_path):
         print("✅ Fichier déjà présent.")
         return
 
-    print("⬇️ Téléchargement depuis Dropbox...")
-    response = requests.get(dropbox_url)
+    print("⬇️ Téléchargement depuis Amazon S3...")
+    response = requests.get(s3_url)
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
 
     with open(dest_path, "wb") as f:
@@ -18,11 +18,11 @@ def download_from_dropbox(dropbox_url, dest_path):
     print("✅ Fichier téléchargé avec succès.")
 
 def run_preprocessing():
-    dropbox_url = "https://www.dropbox.com/scl/fi/dy9qt19kgloy9847cwai2/RAW_recipes.csv?rlkey=ro0amizdaw78u253f28vi05mn&st=pw503kyd&dl=1"
+    s3_url = "https://myprojetkit.s3.eu-north-1.amazonaws.com/RAW_recipes.csv"
     raw_file_path = "./data/RAW_recipes.csv"
     output_path = "./data/cleaned_recipes.csv"
 
-    download_from_dropbox(dropbox_url, raw_file_path)
+    download_from_s3(s3_url, raw_file_path)
 
     print(f"Fichier brut prêt : {raw_file_path}")
 
